@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Dictionary</string>
+    <string name="find">find</string>
+    <string name="cancel">cancel</string>
+    <string name="hint_enter_word">hint</string>
+    <string name="enter_word">Enter word</string>
+</resources>
