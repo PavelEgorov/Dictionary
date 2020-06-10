@@ -6,56 +6,55 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.egorovfond.dictionary.R
 import com.egorovfond.dictionary.entities.RetrofitDictionary
+import com.egorovfond.dictionary.entities.data.SearchResult
+import com.egorovfond.dictionary.mvvm.BaseViewModel
+import com.egorovfond.dictionary.mvvm.MainInteractor
+import com.egorovfond.dictionary.mvvm.MainViewModel
 import com.egorovfond.dictionary.presenters.MainPresenter
-import com.egorovfond.dictionary.ui.viewmodels.MainViewModel
+import com.egorovfond.dictionary.ui.viewmodels.IRvMainPresenter
+import com.egorovfond.dictionary.ui.viewmodels.MainView
 import com.egorovfond.dictionary.usecases.DictionaryModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Single
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.btn_sheet_main.*
+import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), MainViewModel {
+class MainActivity : BaseActivity<List<SearchResult>, MainInteractor>() {
 
-    lateinit var presenter: MainPresenter
-    lateinit var adapter: MainRvAdapter
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    override lateinit var model: MainViewModel
+    private val adapter: MainRvAdapter by lazy { MainRvAdapter(model.rvAdapterPresenter) }
     lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter = MainPresenter(AndroidSchedulers.mainThread(),this, DictionaryModel(RetrofitDictionary()))
-        presenter.init()
+        model = viewModelFactory.create(MainViewModel::class.java)
+        model.subscribe().observe(this@MainActivity, Observer<List<SearchResult>> { renderData() })
 
+        init()
     }
 
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-        return super.onCreateView(name, context, attrs)
-
+    override fun renderData() {
+        adapter?.let{
+            it.notifyDataSetChanged()
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
-        presenter.onStart()
-    }
-    override fun onStop() {
-        super.onStop()
-        presenter.onStop()
-    }
-
-    override fun init() {
+    fun init() {
         rv_main.layoutManager = LinearLayoutManager(applicationContext)
-        adapter = MainRvAdapter(presenter.rvAdapterPresenter)
         rv_main.adapter = adapter
-
-//        val fab: FloatingActionButton = findViewById(R.id.fab_main)
-//        fab.setOnClickListener { view ->
-//            presenter.openFind()
-//        }
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
 
@@ -65,32 +64,8 @@ class MainActivity : AppCompatActivity(), MainViewModel {
 
         btn_find.setOnClickListener {
             edt_find.editText?.let{
-                presenter.findWorld(it.text.toString())
+                model.findWorld(it.text.toString())
             }
-        }
-        btn_cancel.setOnClickListener {
-            presenter.getAll()
-        }
-    }
-
-    override fun viewEditText() {
-        bottomSheetBehavior?.let{
-            it.isHideable = false
-        }
-    }
-
-    override fun hideEditText() {
-        edt_find.editText?.let {
-        }
-        bottomSheetBehavior?.let{
-//            it.isHideable = true
-        }
-
-    }
-
-    override fun update() {
-        adapter?.let{
-//            it.notifyDataSetChanged()
         }
     }
 }
