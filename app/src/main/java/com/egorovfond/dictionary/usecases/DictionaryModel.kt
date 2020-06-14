@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class DictionaryModel @Inject constructor(val database : IDatabase): IDictionary {
-    override fun getByText(text: String): Single<List<SearchResult>> {
-        return database.getByText(text).subscribeOn(Schedulers.io())
+    override suspend fun getByText(text: String): List<SearchResult> {
+        return database.getByText(text)
     }
 }

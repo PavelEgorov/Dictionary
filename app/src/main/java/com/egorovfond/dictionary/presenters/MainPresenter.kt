@@ -49,9 +49,9 @@ class MainPresenter(
 
     fun findWorld(world: String){
         viewModel.hideEditText()
-        dictionary.getByText(world)
-            .observeOn(mainThread)
-            .subscribeWith(getObserver())
+//        dictionary.getByText(world)
+//            .observeOn(mainThread)
+//            .subscribeWith(getObserver())
     }
 
     fun getAll(){

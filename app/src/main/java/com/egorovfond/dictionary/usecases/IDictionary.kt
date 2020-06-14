@@ -4,5 +4,5 @@ import com.egorovfond.dictionary.entities.data.SearchResult
 import io.reactivex.rxjava3.core.Single
 
 interface IDictionary {
-    fun getByText(text: String) : Single<List<SearchResult>>
+    suspend fun getByText(text: String) : List<SearchResult>
 }
