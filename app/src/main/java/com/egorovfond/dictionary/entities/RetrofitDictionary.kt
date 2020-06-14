@@ -1,6 +1,7 @@
 package com.egorovfond.dictionary.entities
 
-class RetrofitDictionary: IDatabase {
-    override fun getAll() = ApiHolder.api.meanings()
+import javax.inject.Inject
+
+class RetrofitDictionary @Inject constructor(): IDatabase {
     override fun getByText(text: String)= ApiHolder.api.search(text)
 }

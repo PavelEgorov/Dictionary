@@ -1,6 +1,6 @@
 package com.egorovfond.dictionary.ui.viewmodels
 
-interface MainViewModel {
+interface MainView {
     fun init()
 
     fun viewEditText()

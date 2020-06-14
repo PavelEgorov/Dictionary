@@ -1,28 +1,25 @@
-package com.egorovfond.dictionary.presenters
+package com.egorovfond.dictionary.mvvm
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import com.egorovfond.dictionary.entities.data.SearchResult
+import com.egorovfond.dictionary.entities.data.World
+import com.egorovfond.dictionary.presenters.MainPresenter
 import com.egorovfond.dictionary.ui.viewmodels.IMainViewHolder
 import com.egorovfond.dictionary.ui.viewmodels.IRvMainPresenter
 import com.egorovfond.dictionary.ui.viewmodels.MainView
-import com.egorovfond.dictionary.entities.data.SearchResult
-import com.egorovfond.dictionary.usecases.IDictionary
-import com.egorovfond.dictionary.entities.data.World
-import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.SingleObserver
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
+import javax.inject.Inject
 
-class MainPresenter(
-    val mainThread: Scheduler,
-    val viewModel: MainView,
-    val dictionary: IDictionary
-) {
+class MainViewModel @Inject constructor(private val interactor: MainInteractor) :
+BaseViewModel<List<SearchResult>>() {
 
-    lateinit var rvAdapterPresenter: MainRvAdapterPresenter
-    val disposable = CompositeDisposable()
-    private val TAG = MainPresenter::class.java.toString()
+    private var appState: List<SearchResult>? = null
+    lateinit var rvAdapterPresenter: MainPresenter.MainRvAdapterPresenter
+    private val TAG = MainViewModel::class.java.toString()
 
-    class MainRvAdapterPresenter: IRvMainPresenter{
+    class MainRvAdapterPresenter: IRvMainPresenter {
         val list = mutableListOf<World>()
         override var onClickListener: ((IMainViewHolder) -> Unit)? = null
 
@@ -38,35 +35,14 @@ class MainPresenter(
         }
     }
 
-    fun init() {
-        rvAdapterPresenter = MainRvAdapterPresenter()
-        viewModel.init()
+    fun subscribe(): LiveData<List<SearchResult>> {
+        return liveDataForViewToObserve
     }
 
-    fun openFind(){
-        viewModel.viewEditText()
-    }
-
-    fun findWorld(world: String){
-        viewModel.hideEditText()
-        dictionary.getByText(world)
-            .observeOn(mainThread)
+    override fun findWorld(word: String) {
+        interactor.getData(word)
+            .observeOn(schedulerProvider.ui())
             .subscribeWith(getObserver())
-    }
-
-    fun getAll(){
-        // пока не реализую, т.к. не увидел запроса на получение всех слов в api
-//        dictionary.getAll()
-//            .observeOn(mainThread)
-//            .subscribeWith(getObserver())
-    }
-
-    fun onStart(){
-        this.getAll()
-    }
-
-    fun onStop(){
-        disposable.clear()
     }
 
     private fun getObserver(): SingleObserver<List<SearchResult>> {
@@ -83,19 +59,16 @@ class MainPresenter(
 
                     rvAdapterPresenter.list.addAll(words)
                 }
-                viewModel.update()
-                viewModel.hideEditText()
-            }
+                }
 
             override fun onSubscribe(d: Disposable?) {
                 d?.let {
-                    disposable.add(it)
+                    compositeDisposable.add(it)
                 }
             }
 
             override fun onError(e: Throwable?) {
                 Log.d(TAG, "$e")
-                viewModel.hideEditText()
             }
         }
     }
