@@ -3,8 +3,7 @@ package com.egorovfond.dictionary.presenters
 import android.util.Log
 import com.egorovfond.dictionary.ui.viewmodels.IMainViewHolder
 import com.egorovfond.dictionary.ui.viewmodels.IRvMainPresenter
-import com.egorovfond.dictionary.ui.viewmodels.MainViewModel
-import com.egorovfond.dictionary.entities.data.Dictionary
+import com.egorovfond.dictionary.ui.viewmodels.MainView
 import com.egorovfond.dictionary.entities.data.SearchResult
 import com.egorovfond.dictionary.usecases.IDictionary
 import com.egorovfond.dictionary.entities.data.World
@@ -15,7 +14,7 @@ import io.reactivex.rxjava3.disposables.Disposable
 
 class MainPresenter(
     val mainThread: Scheduler,
-    val viewModel: MainViewModel,
+    val viewModel: MainView,
     val dictionary: IDictionary
 ) {
 

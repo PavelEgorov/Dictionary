@@ -1,10 +1,13 @@
 package com.egorovfond.dictionary.usecases
 
 import com.egorovfond.dictionary.entities.IDatabase
+import com.egorovfond.dictionary.entities.data.SearchResult
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import javax.inject.Inject
 
-class DictionaryModel(val database : IDatabase): IDictionary {
-    override fun getAll()= database.getAll().subscribeOn(Schedulers.io())
-
-    override fun getByText(text: String) =  database.getByText(text).subscribeOn(Schedulers.io())
+class DictionaryModel @Inject constructor(val database : IDatabase): IDictionary {
+    override fun getByText(text: String): Single<List<SearchResult>> {
+        return database.getByText(text).subscribeOn(Schedulers.io())
+    }
 }
