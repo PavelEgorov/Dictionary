@@ -1,5 +1,6 @@
 package com.egorovfond.dictionary.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.lifecycle.Observer
@@ -55,6 +56,10 @@ class MainActivity : BaseActivity<List<SearchResult>, MainInteractor>() {
             edt_find.editText?.let{
                 model.findWorld(it.text.toString())
             }
+        }
+
+        fab_main.setOnClickListener{
+            startActivity(Intent(this, HistoryActivity::class.java))
         }
     }
 }
