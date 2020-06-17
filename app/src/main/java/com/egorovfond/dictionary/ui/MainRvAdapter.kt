@@ -1,8 +1,10 @@
 package com.egorovfond.dictionary.ui
 
+import android.content.Intent.getIntent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.egorovfond.dictionary.R
 import com.egorovfond.dictionary.ui.viewmodels.IMainViewHolder
@@ -35,6 +37,16 @@ class MainRvAdapter(val presenter : IRvMainPresenter): RecyclerView.Adapter<Main
 
         override fun setSubmission(text: String) = with(containerView){
             txt_submission.text = text
+        }
+
+        override fun onClick(text: String, url: String) = with(containerView){
+            this.context.startActivity(
+                ImageActivity.getIntent(
+                    this.context,
+                    text,
+                    url
+                )
+            )
         }
     }
 }

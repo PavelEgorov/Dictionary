@@ -7,5 +7,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class SearchResult(
     @Expose val text: String,
+    @Expose val imageUrl: String,
     @Expose val meanings: List<Meanings>?
 ) : Parcelable

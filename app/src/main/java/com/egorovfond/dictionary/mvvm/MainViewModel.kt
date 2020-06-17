@@ -33,6 +33,7 @@ BaseViewModel<List<SearchResult>>() {
                 holder.setText(it.text)
                 holder.setSubmission(it.submission)
             }
+            onClickListener = {holder.onClick(list[holder.pos].text, list[holder.pos].imageUrl)}
         }
     }
 
@@ -51,7 +52,7 @@ BaseViewModel<List<SearchResult>>() {
         val result = interactor.getData(word)
         val words = mutableListOf<World>()
         for (i in result){
-            val word = World(i.text, stringMeanings(i))
+            val word = World(i.text, i.imageUrl, stringMeanings(i))
             words.add(word)
         }
 
@@ -66,7 +67,7 @@ BaseViewModel<List<SearchResult>>() {
                 t?.let {
                     val words = mutableListOf<World>()
                     for (i in it){
-                        val word = World(i.text, stringMeanings(i))
+                        val word = World(i.text, i.imageUrl, stringMeanings(i))
                         words.add(word)
                     }
 

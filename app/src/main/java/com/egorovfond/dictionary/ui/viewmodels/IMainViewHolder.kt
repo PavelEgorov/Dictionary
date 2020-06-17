@@ -5,4 +5,6 @@ interface IMainViewHolder {
 
     fun setText(text: String)
     fun setSubmission(text: String)
+
+    fun onClick(text: String, url: String)
 }
