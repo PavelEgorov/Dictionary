@@ -1,6 +1,5 @@
 package com.egorovfond.dictionary.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.egorovfond.dictionary.R

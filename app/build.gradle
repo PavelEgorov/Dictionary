@@ -4,83 +4,57 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    androidExtensions {
-        experimental = true
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
-
+    compileSdkVersion Config.compile_sdk
     defaultConfig {
-        applicationId "com.egorovfond.dictionary"
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
+        applicationId Config.application_id
+        minSdkVersion Config.min_sdk
+        targetSdkVersion Config.target_sdk
+        versionCode Releases.version_code
+        versionName Releases.version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
+    compileOptions {
+        sourceCompatibility Config.java_version
+        targetCompatibility Config.java_version
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    //Modules
+    implementation project(Modules.core)
+    implementation project(Modules.model)
+    implementation project(Modules.repository)
+    implementation project(Modules.utils)
+    implementation project(Modules.historyScreen) //Feature
 
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.1'
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding:3.1.0'
+    //AndroidX
+    implementation Tools.multidex
+    implementation Design.appcompat
 
-    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
-    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.7.1'
-
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0'
-
-    implementation 'com.google.dagger:dagger-android:2.17'
-    implementation 'com.google.dagger:dagger-android-support:2.17'
-    kapt 'com.google.dagger:dagger-android-processor:2.17'
-    kapt 'com.google.dagger:dagger-compiler:2.17'
+    //Design
+    //You should not use the com.android.support and com.google.android.material dependencies in your app at the same time
+    implementation Design.material
 
     //Kotlin
-    implementation 'androidx.core:core-ktx:1.3.0'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.71'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4'
+    implementation Kotlin.core
+    implementation Kotlin.stdlib
 
     //Koin for Android
-    implementation 'org.koin:koin-android:2.0.1'
-    implementation 'org.koin:koin-android-viewmodel:2.0.1'
+    implementation Koin.koin_android
+    implementation Koin.koin_view_model
 
-    //Glide
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    kapt 'com.github.bumptech.glide:compiler:4.9.0'
+    implementation Glide.glide
+    kapt Glide.glide_compiler
 
-    //Room
-    implementation 'androidx.room:room-runtime:2.3.0-alpha01'
-    kapt 'androidx.room:room-compiler:2.3.0-alpha01'
-    implementation 'androidx.room:room-ktx:2.3.0-alpha01'
-
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
+    //Test
+    testImplementation TestImpl.junit
+    androidTestImplementation TestImpl.runner
+    androidTestImplementation TestImpl.espresso
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }

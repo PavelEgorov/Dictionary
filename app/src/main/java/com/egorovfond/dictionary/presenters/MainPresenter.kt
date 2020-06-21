@@ -77,7 +77,11 @@ class MainPresenter(
                 t?.let {
                     val words = mutableListOf<World>()
                     for (i in it){
-                        val word = World(i.text, i.imageUrl, stringMeanings(i))
+                        val word = World(
+                            i.text,
+                            i.imageUrl,
+                            stringMeanings(i)
+                        )
                         words.add(word)
                     }
 

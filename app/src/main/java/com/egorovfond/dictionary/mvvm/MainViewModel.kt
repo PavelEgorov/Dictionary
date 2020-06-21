@@ -7,10 +7,8 @@ import com.egorovfond.dictionary.entities.data.World
 import com.egorovfond.dictionary.presenters.MainPresenter
 import com.egorovfond.dictionary.ui.viewmodels.IMainViewHolder
 import com.egorovfond.dictionary.ui.viewmodels.IRvMainPresenter
-import com.egorovfond.dictionary.ui.viewmodels.MainView
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.Disposable
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(private val interactor: MainInteractor) :
@@ -52,7 +50,11 @@ BaseViewModel<List<SearchResult>>() {
         val result = interactor.getData(word)
         val words = mutableListOf<World>()
         for (i in result){
-            val word = World(i.text, i.imageUrl, stringMeanings(i))
+            val word = World(
+                i.text,
+                i.imageUrl,
+                stringMeanings(i)
+            )
             words.add(word)
         }
 
@@ -67,7 +69,11 @@ BaseViewModel<List<SearchResult>>() {
                 t?.let {
                     val words = mutableListOf<World>()
                     for (i in it){
-                        val word = World(i.text, i.imageUrl, stringMeanings(i))
+                        val word = World(
+                            i.text,
+                            i.imageUrl,
+                            stringMeanings(i)
+                        )
                         words.add(word)
                     }
 

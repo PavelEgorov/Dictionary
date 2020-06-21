@@ -3,8 +3,6 @@ package com.egorovfond.dictionary.di.koin
 import androidx.room.Room
 import com.egorovfond.dictionary.entities.IDatabase
 import com.egorovfond.dictionary.entities.RetrofitDictionary
-import com.egorovfond.dictionary.entities.data.Dictionary
-import com.egorovfond.dictionary.entities.data.SearchResult
 import com.egorovfond.dictionary.mvvm.HistoryInteractor
 import com.egorovfond.dictionary.mvvm.HistoryViewModel
 import com.egorovfond.dictionary.mvvm.MainInteractor
@@ -28,6 +26,6 @@ val mainScreen = module {
 }
 
 val historyScreen = module {
-    factory { HistoryViewModel(get()) }
-    factory { HistoryInteractor(get()) }
+    factory { com.egorovfond.dictionary.mvvm.HistoryViewModel(get()) }
+    factory { com.egorovfond.dictionary.mvvm.HistoryInteractor(get()) }
 }

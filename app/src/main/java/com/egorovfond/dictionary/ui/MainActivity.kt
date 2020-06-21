@@ -59,7 +59,7 @@ class MainActivity : BaseActivity<List<SearchResult>, MainInteractor>() {
         }
 
         fab_main.setOnClickListener{
-            startActivity(Intent(this, HistoryActivity::class.java))
+            startActivity(Intent(this, com.egorovfond.dictionary.ui.HistoryActivity::class.java))
         }
     }
 }

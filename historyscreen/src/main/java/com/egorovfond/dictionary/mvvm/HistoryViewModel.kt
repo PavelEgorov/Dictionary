@@ -2,15 +2,14 @@ package com.egorovfond.dictionary.mvvm
 
 import androidx.lifecycle.LiveData
 import com.egorovfond.dictionary.entities.data.SearchResult
-import com.egorovfond.dictionary.entities.data.World
 import com.egorovfond.dictionary.ui.viewmodels.IHistoryAdapter
 import com.egorovfond.dictionary.ui.viewmodels.IHistoryViewHolder
-import kotlinx.coroutines.launch
 
 class HistoryViewModel(private val interactor: HistoryInteractor) :
     BaseViewModel<List<SearchResult>>() {
 
-    val rvAdapterPresenter = HistoryRvAdapterPresenter()
+    val rvAdapterPresenter =
+        HistoryRvAdapterPresenter()
 
     class HistoryRvAdapterPresenter: IHistoryAdapter {
         val list = mutableListOf<SearchResult>()
