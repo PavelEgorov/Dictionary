@@ -1,4 +1,4 @@
-package com.egorovfond.dictionary.di.koin
+package com.egorovfond.dictionary
 
 import androidx.room.Room
 import com.egorovfond.dictionary.entities.IDatabase
@@ -16,23 +16,10 @@ import org.koin.dsl.module
 fun injectDependencies() = loadModules
 
 private val loadModules by lazy {
-    loadKoinModules(listOf(application, mainScreen))
+    loadKoinModules(listOf(historyScreen))
 }
 
-val application = module{
-    single { Room.databaseBuilder(get(), HistoryDataBase::class.java, "HistoryDB").build() }
-    single { get<HistoryDataBase>().historyDao() }
-
-    single<IDatabase> { RetrofitDictionary() }
-    single<IDictionary>{ DictionaryModel(get<IDatabase>()) }
+val historyScreen = module {
+    factory { com.egorovfond.dictionary.mvvm.HistoryViewModel(get()) }
+    factory { com.egorovfond.dictionary.mvvm.HistoryInteractor(get()) }
 }
-
-val mainScreen = module {
-    factory { MainInteractor(get()) }
-    factory { MainViewModel(get()) }
-}
-
-//val historyScreen = module {
-//    factory { com.egorovfond.dictionary.mvvm.HistoryViewModel(get()) }
-//    factory { com.egorovfond.dictionary.mvvm.HistoryInteractor(get()) }
-//}
