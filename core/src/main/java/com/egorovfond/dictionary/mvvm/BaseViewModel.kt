@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.egorovfond.dictionary.entities.data.SearchResult
 import com.egorovfond.dictionary.rx.SchedulerProvider
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import kotlinx.coroutines.*
 
 abstract class BaseViewModel<T : List<SearchResult>>(
     protected open val liveDataForViewToObserve: MutableLiveData<T> = MutableLiveData(),

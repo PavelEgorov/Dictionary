@@ -15,7 +15,12 @@ class RoomDictionary(private val historyDao: HistoryDao) :
 
             /// Решение очень плохое!!! Нужно делать две таблицы и meanings помещать во вторую!
             // Т.к. времени мало, и я старался адаптировать код, оставлю так.
-            val searchResult = SearchResult(it.word, it.description!!, meanings)
+            val searchResult =
+                SearchResult(
+                    it.word,
+                    it.description!!,
+                    meanings
+                )
             return@flatMap listOf(searchResult)
         }
     }
