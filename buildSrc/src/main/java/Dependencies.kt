@@ -63,6 +63,8 @@ object Versions {
     const val jUnit = "4.12"
     const val runner = "1.2.0"
     const val espressoCore = "3.2.0"
+
+    const val googlPlay = "1.7.3"
 }
 
 
@@ -102,6 +104,10 @@ object Glide {
 
 object Picasso {
     const val picasso = "com.squareup.picasso:picasso:${Versions.picasso}"
+}
+
+object Google {
+    const val play = "com.google.android.play:core:${Versions.googlPlay}"
 }
 
 object Room {
