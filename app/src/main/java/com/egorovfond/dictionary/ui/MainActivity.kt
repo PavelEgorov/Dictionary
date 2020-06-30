@@ -1,19 +1,24 @@
 package com.egorovfond.dictionary.ui
 
 import android.content.Intent
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.egorovfond.dictionary.R
 import com.egorovfond.dictionary.di.koin.injectDependencies
 import com.egorovfond.dictionary.entities.data.SearchResult
 import com.egorovfond.dictionary.mvvm.MainInteractor
 import com.egorovfond.dictionary.mvvm.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallState
@@ -25,17 +30,18 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
+import com.egorovfond.utils.ui.viewById
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.btn_sheet_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
-import javax.inject.Inject
-
 
 class MainActivity : BaseActivity<List<SearchResult>, MainInteractor>() {
 
 
     @Inject
     internal lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val mainActivityRecyclerview by viewById<RecyclerView>(R.id.rv_main)
 
     override val model: MainViewModel by viewModel()
     private val adapter: MainRvAdapter by lazy { MainRvAdapter(model.rvAdapterPresenter) }
@@ -76,8 +82,8 @@ class MainActivity : BaseActivity<List<SearchResult>, MainInteractor>() {
 
         checkForUpdates()
 
-        rv_main.layoutManager = LinearLayoutManager(applicationContext)
-        rv_main.adapter = adapter
+        mainActivityRecyclerview.layoutManager = LinearLayoutManager(applicationContext)
+        mainActivityRecyclerview.adapter = adapter
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
 
@@ -159,6 +165,7 @@ class MainActivity : BaseActivity<List<SearchResult>, MainInteractor>() {
             }
         }
     }
+
     override fun onResume() {
         super.onResume()
         appUpdateManager
@@ -178,6 +185,25 @@ class MainActivity : BaseActivity<List<SearchResult>, MainInteractor>() {
                     )
                 }
             }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+       menu?.findItem(R.id.menu_screen_settings)?.isVisible =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+                R.id.menu_screen_settings -> {
+                    startActivityForResult(
+                        Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY),
+                        42)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 }

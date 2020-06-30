@@ -2,16 +2,18 @@ package com.egorovfond.dictionary.ui
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.egorovfond.dictionary.R
 import com.egorovfond.dictionary.entities.data.SearchResult
 import com.egorovfond.dictionary.mvvm.HistoryInteractor
 import com.egorovfond.dictionary.mvvm.HistoryViewModel
-import kotlinx.android.synthetic.main.activity_history.*
+import com.egorovfond.utils.ui.viewById
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class HistoryActivity : BaseActivity<List<SearchResult>, HistoryInteractor>() {
 
     override val model: HistoryViewModel by viewModel()
+    private val mainActivityRecyclerview by viewById<RecyclerView>(R.id.history_activity_recyclerview)
     private val adapter: HistoryAdapter by lazy { HistoryAdapter(model.rvAdapterPresenter) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +29,7 @@ class HistoryActivity : BaseActivity<List<SearchResult>, HistoryInteractor>() {
     }
 
     private fun iniViewModel() {
-        if (history_activity_recyclerview.adapter != null) {
+        if (mainActivityRecyclerview.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
         model.subscribe().observe(this@HistoryActivity, Observer<List<SearchResult>> { renderData() })
@@ -40,6 +42,6 @@ class HistoryActivity : BaseActivity<List<SearchResult>, HistoryInteractor>() {
     }
 
     private fun initViews() {
-        history_activity_recyclerview.adapter = adapter
+        mainActivityRecyclerview.adapter = adapter
     }
 }
